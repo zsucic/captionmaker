@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <base target="_top">
+    <link href="https://ssl.gstatic.com/docs/script/css/add-ons1.css" rel="stylesheet">
+    <!-- The CSS package above applies Google styling to buttons and other elements. -->
+    <style>
+ form{
+     width:250px;
+
+}
+ .options {
+     display:none;
+     padding: 2px;
+  background-color: #f0f0f0;
+}
+ h4,h5 {
+     text-align:left;
+     height:0px;
+     padding-top:15px;
+}
+ .detailed_options {
+     
+     background-color: LIGHTGRAY;
+     padding:5px;
+     text-align:center;
+     display: block;
+}
+ .options_format {
+     
+     background-color: LIGHTBLUE;
+     padding:5px;
+     text-align:center;
+     display: block;
+}
+ input{
+     display:block;
+     margin-bottom:20px;
+}
+ label {
+     clear: both;
+     float:left;
+     margin-right:15px;
+     margin-bottom:5px;
+     width: 50px;
+     text-align: left;
+}
+​ input[type=text] {
+     width:200px;
+}
+ input[type=number] {
+     width:50px;
+     text-align: center;
+     margin-top:10px;
+}
+ input[type=radio] {
+     display:block;
+     margin-bottom:5px;
+     text-align: center;
+}
+ input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button {
+     opacity: 1;
+}
+input[disabled] {
+    color: gray;  
+}
+ .alignment_properties input {
+     display:block;
+     margin-top:8px;
+}
+ .options_format input[type=number] {
+     display:block;
+     margin-top:10px;
+}
+ .options_format select {
+     display:block;
+     margin-top:10px;
+     margin-left:30px;
+     align:center;
+}
+ .alignment_properties label {
+     display:block;
+     text-align:right;
+     width:40px;
+     margin-right:15px;
+     margin-left:35px;
+     margin-top:1px;
+}
+ .font_properties label {
+     display:block;
+     text-align:right;
+     width:40px;
+     margin-right:15px;
+     margin-left:35px;
+     margin-top:5px;
+}
+ .section_title input {
+     display:inline-block;
+}
+ .button_block {
+     background-color: white;
+     display:block;
+     padding: 2px;
+     text-align:center;
+}
+ .marking_buttons, .list_buttons, .main_buttons, .option_buttons {
+     
+     background-color: WHITE;
+     padding:5px;
+     text-align:center;
+     display:block;
+     align-items: center;
+    justify-content: center;
+}
+.option_buttons {
+display:flex;
+}
+button, input[type=button]{
+     width:180px;
+     align:center;
+}
+.debug_area{
+display:none;
+}
+#label_update_links
+{
+  display:inline-block;
+  width:60%;
+  padding-bottom:10px;
+  padding-top:10px;
+  padding-left:30px;
+}
+#update_links{ 
+  margin-top: 10px;
+  display:inline-block;
+}
+.numbering_block{
+  width:100%; 
+}
+.numbering_block_left{
+  width:50%;
+  display:inline-block;
+  padding-top:5px;
+  
+}
+.numbering_block_right{
+  width:50%;
+  float:right;  
+}
+#connector_img,#connector_tbl {
+     width:30px;
+     padding:0px;
+     margin:0px;
+     text-align: center; 
+  }
+#label_connector_img, #label_connector_tbl {
+     padding:0px;
+     margin:0px;
+     margin-right:15px;
+     margin-top:5px;
+  }
+#start_img, #start_tbl {
+     width:30px;
+     padding:0px;
+     margin:0px;
+  }
+#label_start_img,#label_start_tbl {
+     padding:0px;
+     margin:0px;
+     margin-right:15px;
+     margin-top:5px;
+  }
+  
+    </style>
+
+    <title></title>
+</head>
+<body>
+<div class="sidebar branding-below">
+    <form>
+            <h4>Options</h4>
+            <div class="option_buttons">
+            <input id='tog_opt_but' name="opt_button" type="button" value="Show options"
+               onClick='toggleOptions()'>
+            </div>
+
+        <div class="options" id='options_block'>
+            <div class="options_img" align="left">
+                <div class="section_title" title="Enables or disables the caption of Images and/or Drawings">
+                    <h4><input id="img_caption_on" type="checkbox" class='detailed_options_toggle'
+                               value="Image and Drawing" onClick="toggleDetailedOptions(id)" checked/> Images and
+                        Drawings</h4>
+
+
+                </div>
+                <div id='image_options_block' class="detailed_options">
+                    <div class="position_block"
+                         title="Choose if you want the Image/Drawing caption to be above or below the Image/Drawing">
+                        <h5>Placement</h5>
+
+                        <label for="img_ab_flag">Above</label>
+                        <input id='img_ab_flag' name="img_placement" type="radio" value="">
+
+                        <label for="img_bl_flag">Below</label>
+                        <input id='img_bl_flag' name="img_placement" type="radio" value="" checked>
+
+                    </div>
+                    <div class="input_block">
+                        <h5>Format</h5>
+                        <label for="img_oldlabel">Old</label>
+                        <input id="img_oldlabel" placeholder="empty=new label" type="text"
+                               value="{reg}^(Figure|Image)\s*([^a-z\s]*)\s*([^\n]*)$"
+                               title="Here you can enter either a regex or a simple text formulation using {c} for count and {t} for caption text for Figures. This will tell the caption maker how to recognize old labels and extract text to keep from them if you're chaning the format"><span/>
+
+                        <label for="img_label">New</label>
+                        <input id="img_label" placeholder="" type="text" value="Figure {c}. {t}"
+                               title="Enter the format of the new Label for Tables, where {c} will be replaced with image counter and {t} with the caption text">
+                        <div class="numbering_block">
+                          <h5>Numbering</h5>
+                          <div class="numbering_block_left">
+                            
+                              <label  for="heading_num_img">Heading</label>
+                              <input  id='heading_num_img' name="img_use" type="radio" value="" onclick="toggleHeadingUse()"
+                              title="Choose this if you want to use heading numbers + counter within a heading for labeling">
+
+                              <label for="counter_num_img">Counter</label>
+                              <input  id='counter_num_img' name="img_use" type="radio" value="" onclick="toggleHeadingUse()" 
+                              title="Choose this if you want to use a counter within the whole document for labeling"
+                              checked>
+                          </div>
+                          <div class="numbering_block_right">
+                              <label id="label_connector_img" for="connector_img">Connector</label>
+                              <input id="connector_img" type="text" value="-" max-length="1"
+                                    title="You can use this to specify connecting character between heading and counter within that heading.">
+                              <label id="label_start_img" for="start_img">First</label>
+                              <input id="start_img" type="number" value="1" min="0"
+                                    title="You can use this if you don't want to start counting images from 1.">
+                          </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="options_tbl">
+
+                <div class="section_title" title="Enables or disables the caption of tables">
+                    <h4><input id="tbl_caption_on" type="checkbox" class='detailed_options_toggle'
+                               value="Table" onClick="toggleDetailedOptions(id)" checked/> Tables</h4>
+                </div>
+                <div id='table_options_block' class="detailed_options">
+                    <div class="position_block"
+                         title="Choose if you want the new Table caption to be above or below the Table">
+                        <h5>Placement</h5>
+                        <label for="tbl_ab_flag">Above</label>
+                        <input id='tbl_ab_flag' name="tbl_placement" type="radio" value="">
+
+                        <label for="tbl_bl_flag">Below</label>
+                        <input id='tbl_bl_flag' name="tbl_placement" type="radio" value="" checked>
+                    </div>
+                    <div class="input_block">
+                        <h5>Format</h5>
+                        <label for="tbl_oldlabel">Old</label>
+                        <input id="tbl_oldlabel" placeholder="empty=new label" type="text"
+                               value="{reg}^(Table)\s*([^a-z\s]*)\s*([^\n]*)$"
+                               title="Here you can enter either a regex or a simple text formulation using {c} for count and {t} for caption text for Tables. This will tell the caption maker how to recognize old labels and extract text to keep from them if you're chaning the format">
+                        <label for="tbl_label">New</label>
+                        <input id="tbl_label" placeholder="" type="text" value="Table {c}. {t}"
+                               title="Enter the format of the new Label for Tables, where {c} will be replaced with image counter and {t} with the caption text">
+                        <div class="numbering_block"> 
+                          <h5>Numbering</h5>
+                          <div class="numbering_block_left">
+                            <label for="heading_num_tbl">Heading</label>
+                            <input id='heading_num_tbl' name="tbl_use" type="radio" value="" onclick="toggleHeadingUse()"
+                            title="Choose this if you want to use heading numbers + counter within a heading for labeling">
+
+                            <label for="counter_num_tbl">Counter</label>
+                            <input id='counter_num_tbl' name="tbl_use" type="radio" value="" onclick="toggleHeadingUse()" 
+                            title="Choose this if you want to use a counter within the whole document for labeling"
+                            checked>
+                          </div>
+                          <div class="numbering_block_right">
+                              <label id="label_connector_tbl" for="connector_tbl">Connector</label>
+                              <input id="connector_tbl" type="text" value="-" max-length="1"
+                                    title="You can use this to specify connecting character between heading and counter within that heading.">
+                              <label id="label_start_tbl" for="start_tbl">First</label>
+                              <input id="start_tbl" type="number" value="1" min="0"
+                                    title="You can use this if you don't want to start counting tables from 1.">
+                          </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="options_fmt" id="options_format"
+                 title="Here you can set styling for the new captions">
+                <h4>Visual settings</h4>
+                <div class="options_format">
+                    <h5>Predefined style</h5>
+                    <select id="labelStyleToUse">
+                        <option value=0>Normal Text</option>
+                        <option value=1>Subtitle</option>
+                        <option value=2>Heading 5</option>
+                        <option value=3>Heading 6</option>
+                    </select>
+                    <div class="alignment_properties">
+                        <h5>Alignment and Weight</h5>
+                        <label for="use_center">Center</label>
+                        <input id="use_center" type="checkbox" value="use_center" checked>
+                        <label for="use_italic">Italic</label>
+                        <input id="use_italic" type="checkbox" value="use_italic" checked>
+                        <label for="use_bold">Bold</label>
+                        <input id="use_bold" type="checkbox" value="use_bold">
+                    </div>
+                    <div class="font_properties">
+
+                        <h5>Font properties</h5>
+                        <label for="font_size">Size</label>
+                        <input id="font_size" type="number" value="10">
+                        <label for="font_color">Color</label>
+                        <input id="font_color" type="color" value="#444499" checked>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="button_block" id="button-bar">
+
+            <h4>Selection marking</h4>
+            <div class="marking_buttons">
+                <button id="add_mark"
+                        title="This will mark all elements found in the selected part of document as 'Don't caption'. This means that any existing captions on these elements will be lost when running 'caption document'.">
+                    Set caption off
+                </button><br>
+
+                <button id="remove_mark"
+                        title="This will mark all elements found in the selected part of document as 'Create caption'. This means that any of these elements will get a caption label on the next run of 'caption document'.">
+                    Set caption on
+                </button>
+            </div>
+            <h4>Insert/Update listings</h4>
+            <div class="list_buttons">
+                <button id="insert_images"
+                        title="This will create a single cell table with a bulleted list of all the captioned Images/Figures in your document at the current cursor position.">List of images</button><br>
+
+                <button id="insert_tables"
+                        title="This will create a single cell table with a bulleted list of all the captioned Tables in your document at the current cursor position.">List of tables</button><br>
+
+                <button id="update_lists"
+                        title="This will refresh any existing lists of tables or figures created with the two buttons above.">Update lists</button>
+            </div>
+            <h4>Process document</h4>
+            <div class="main_buttons">
+                
+                <input id="update_links" type="checkbox" title="Only use if you've manually entered links to Image & Table captions and want those bookmarks to get updated during captioning. Note, only links will be updated and not the associated text!">
+                <label id="label_update_links" for="update_links" title="Only use if you've manually entered links to Image & Table captions and want those bookmarks to get updated during captioning. Note, only links will be updated and not the associated text!">Auto-update Links</label>
+                <button class="blue" id="captionize_document"
+                        title="This will go through the entire document and attempt to recognise and update any old captions as well as insert new where needed.
+    BEWARE: it will modify your document so use it at your own risk.
+    After it completes, it will display a summary so please be patient, it might take a while to inspect everything...">Captionize</button>
+
+            </div>
+
+            <div class="debug_area">
+                <hr>
+                <input type="button" id='toggledbgbt' value="Enable debug" onclick="toggleDebug()"/>
+                <input id="debugcb" type="checkbox" style="display:none">
+                <hr>
+                <textarea cols="30" id="working_text" rows="100" style="display:none;">log...</textarea>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+
+        function toggleHeadingUse()
+        {
+          
+          if(document.getElementById("heading_num_img").checked==true)
+          {
+            document.getElementById("start_img").style.display="none"; 
+            document.getElementById("label_start_img").style.display="none"; 
+            document.getElementById("connector_img").style.display="block"; 
+            document.getElementById("label_connector_img").style.display="block"; 
+          }
+          else 
+          { 
+            document.getElementById("start_img").style.display="block"; 
+            document.getElementById("label_start_img").style.display="block";  
+            document.getElementById("connector_img").style.display="none"; 
+            document.getElementById("label_connector_img").style.display="none"; 
+
+          }
+      
+          if(document.getElementById("heading_num_tbl").checked==true)
+          {            
+            document.getElementById("start_tbl").style.display="none"; 
+            document.getElementById("label_start_tbl").style.display="none"; 
+            document.getElementById("connector_tbl").style.display="block"; 
+            document.getElementById("label_connector_tbl").style.display="block"; 
+          }
+          else 
+          {
+            document.getElementById("start_tbl").style.display="block"; 
+            document.getElementById("label_start_tbl").style.display="block"; 
+            document.getElementById("connector_tbl").style.display="none"; 
+            document.getElementById("label_connector_tbl").style.display="none"; 
+          }
+          
+        }
+        function toggleOptions()
+        {
+
+            var opt = document.getElementById("options_block");
+            var but= document.getElementById("tog_opt_but");
+            if (opt.style.display === "block")
+            {
+                opt.style.display="none";
+                but.value="Show options";
+            }
+            else
+            {
+               opt.style.display="block";
+               but.value="Hide options";
+            }
+            toggleHeadingUse();
+
+
+        }
+        function toggleDetailedOptions(id)
+        {
+
+            var det_opts_tog = document.getElementsByClassName("detailed_options_toggle");
+            var det_opts = document.getElementsByClassName("detailed_options");
+            var at_least_one=0;
+
+            for (i = 0; i < det_opts_tog.length; i++)
+            {
+                if (det_opts_tog[i].checked)
+                {
+                    det_opts[i].style.display="block";
+                    at_least_one=1;
+                }
+                else
+                {
+                    det_opts[i].style.display='none';
+                }
+            }
+
+            var format_block=document.getElementById("options_format");
+            if (at_least_one)
+            {
+                format_block.style.display="block";
+            }
+            else
+            {
+                format_block.style.display="none";
+            }
+
+            var current_element=document.getElementById(id);
+            if (!current_element.checked)
+            {
+            var message ="You've disabled captioning of " + current_element.value + " elements, which will result in removal of any existing captions for those element types when you click 'Captionize'";
+            google.script.run
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .googleAlert(message);
+
+            }
+
+
+        }
+        function toggleDebug()
+        {
+
+
+            document.getElementById("debugcb").checked=!document.getElementById("debugcb").checked;
+            if(document.getElementById("debugcb").checked)
+            {
+                document.getElementById('toggledbgbt').value='Disable Debug';
+                document.getElementById('working_text').style.display='block';
+            }
+            else
+            {
+                document.getElementById('toggledbgbt').value='Enable Debug';
+                document.getElementById('working_text').style.display='none'; //TODO set display to none!
+            }
+           google.script.run
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .toggleDebug(document.getElementById("debugcb").checked);
+
+
+        }
+
+
+        function isNumber(n) {
+        return !isNaN(parseInt(n)) && isFinite(n);
+        }
+
+        function mergeLabels(oldLabel)
+        {
+          
+          var firstpos=oldLabel.search(/\[/);
+          if(firstpos && firstpos>-1)
+          {
+            var newLabel=oldLabel.substring(0,firstpos) +"\\s*([^a-z\\s]*)\\s*([^\\n]*)$";
+            return newLabel;
+          }
+          return null;
+        }
+
+        $(function() {
+          $('#captionize_document').click(captionize_document);
+          $('#add_mark').click(add_mark);
+          $('#remove_mark').click(remove_mark);
+          $('#insert_tables').click(insert_tables_click);
+          $('#insert_images').click(insert_images_click);
+             $('#update_lists').click(update_lists_click);
+           google.script.run
+              .withSuccessHandler(
+                function loadPreferences(docPref,element)
+                {
+                  document.getElementById("working_text").value="LOADED PREF:"+JSON.stringify(docPref) ;
+                  element.disabled = false;
+                  var keys=Object.keys(docPref);
+                  var oldLabelCheck=docPref["img_oldlabel"];
+                  //console.log(oldLabelCheck);
+                  //console.log("\s*([^a-z\s]*)\s*([^\n]*)$");
+                    if(oldLabelCheck.endsWith("[.\\-\\s\\:\\0-9]*([^\\n]*)$"))
+                    //if(true)
+                    {
+                        var title="Notice: Caption Maker was updated to support using heading numbers for Image and Table labels"
+                        var message="In order to support this change, the regular expressions used to find old labels in document had to be updated. To minimize disruption, Caption Maker tried to merge any changes you might have done to the regular expressions linked to this document and ";
+                        var merged_image_label=mergeLabels(docPref["img_oldlabel"]);
+                        var merged_table_label=mergeLabels(docPref["tbl_oldlabel"]);
+                        if(merged_image_label && merged_table_label)
+                        {
+                          message += " came up with following:\n";
+                          message += "\n Image label: " + merged_image_label;
+                          message += "\n Table label: " + merged_table_label;
+                          message += "\n\nThe above have been saved in UI only and will be stored in the document once you click Captionize."
+                          message += "\nIf you don't click Captionize, you'll be greeted by this same message the next time you open Caption Maker in this document.";                 
+                          docPref["img_oldlabel"]=merged_image_label;
+                          docPref["tbl_oldlabel"]=merged_table_label;
+                        }
+                        else
+                        {
+                          message += " wasn't able to. That means that no change has been done to the mentioned regular expressions and you'll need to adapt them your self... If you don't, and you choose to switch to headings for numbering, expect to see issues in duplication of captions, etc."
+                        }
+                         
+                      
+                    google.script.run
+                      .withFailureHandler(
+                        function(msg, element) {
+                          showError(msg, $('#button-bar'));
+                          element.disabled = false;
+                        })
+                      .withUserObject(this)
+                      .googleAlertWithTitle(title,message);
+                    }
+                    for (var i=0;i<keys.length;i++)
+                    {
+
+                      try
+                      {
+                        var keyToUse=keys[i];
+                        var valueToSet=docPref[keyToUse];
+                        //console.log("key " + keyToUse + " value "+valueToSet);
+                        var elementToSet=document.getElementById(keyToUse);
+                        if(elementToSet)
+                        {
+                        document.getElementById("working_text").value=document.getElementById("working_text").value +"\n" +i + " " +keyToUse + " " + elementToSet.type + " " + valueToSet ;
+                            switch (elementToSet.type)
+                            {
+                                  case "text":
+                                  case "color":
+                                  elementToSet.value=valueToSet;
+                                  break;
+                                  case "radio":
+                                  case "checkbox":
+                                  elementToSet.checked=(valueToSet==="true");
+                                  break;
+                                  case "number":
+                                  case "select-one":
+                                  elementToSet.value=parseInt(valueToSet);
+                                  break;
+                                  default:
+                                  break;
+
+                            }
+                        }
+                      }
+                      catch (ex)
+                      {
+                          document.getElementById("working_text").value=document.getElementById("working_text").value +"\n" + ex +"\N" + " st: " +ex.stack;
+                      }
+                    }
+                  
+
+                  
+
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this).getPreferences();
+
+          
+         
+        });
+
+
+        function insert_tables_click()
+        {
+        var tbl_ab_flag=document.getElementById('tbl_ab_flag').checked;
+        $('#error').remove();
+         this.disabled = true;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation,element) {
+                  $('#working_text').val(textAndTranslation);
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                  })
+              .withUserObject(this)
+              .insert_tables(tbl_ab_flag);
+        }
+
+           function update_lists_click()
+        {
+        var tbl_ab_flag=document.getElementById('tbl_ab_flag').checked;
+        var img_ab_flag=document.getElementById('img_ab_flag').checked;
+        $('#error').remove();
+         this.disabled = true;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation,element) {
+                  $('#working_text').val(textAndTranslation);
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                  })
+              .withUserObject(this)
+              .update_table_and_image_lists(img_ab_flag,tbl_ab_flag);
+        }
+
+        function insert_images_click()
+        {
+         var img_ab_flag=document.getElementById('img_ab_flag').checked;
+
+           
+        $('#error').remove();
+        this.disabled = true;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation, element) {
+                  $('#working_text').val(textAndTranslation);
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .insert_images(img_ab_flag);
+        }
+
+        function add_mark()
+        {
+        $('#error').remove();
+         this.disabled = true;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation, element) {
+                  $('#working_text').val(textAndTranslation);
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .mark_element(true);
+        }
+        function remove_mark()
+        {
+        $('#error').remove();
+        this.disabled = true;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation, element) {
+                  $('#working_text').val(textAndTranslation);
+                  element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .mark_element(false);
+        }
+
+
+
+        function captionize_document() {
+          this.disabled = true;
+          $('#error').remove();
+
+           var use_center = document.getElementById("use_center").checked; // $('#use_center').is(':checked');
+           var use_italic = document.getElementById("use_italic").checked; //$('#use_italic').is(':checked');
+           var use_bold = document.getElementById("use_bold").checked; //$('#use_bold').is(':checked');
+
+           var img_caption_on =document.getElementById("img_caption_on").checked; // $('#img_caption_on').is(':checked');
+           var tbl_caption_on =document.getElementById("tbl_caption_on").checked; // $('#tbl_caption_on').is(':checked');
+           var img_label = document.getElementById("img_label").value; //$('#img_label').val();
+           var tbl_label = document.getElementById("tbl_label").value; //$('#tbl_label').val();
+           var img_oldlabel = document.getElementById("img_oldlabel").value; //$('#img_label').val();
+           var tbl_oldlabel = document.getElementById("tbl_oldlabel").value; //$('#tbl_label').val();
+
+              var styleSelector = document.getElementById('labelStyleToUse');
+              var labelStyleToUse=styleSelector.options[styleSelector.selectedIndex].value;
+
+           var start_img =  parseInt( document.getElementById("start_img").value); // $('#start_img').val();
+           var start_tbl =  parseInt( document.getElementById("start_tbl").value); // $('#start_tbl').val();
+           var font_size =  parseInt( document.getElementById("font_size").value);
+              var font_color =  document.getElementById("font_color").value;
+
+           var tbl_ab_flag=document.getElementById('tbl_ab_flag').checked;
+           var img_ab_flag=document.getElementById('img_ab_flag').checked;
+
+           var heading_num_img=document.getElementById("heading_num_img").checked ;
+           var heading_num_tbl=document.getElementById("heading_num_tbl").checked;
+           var connector_img=document.getElementById("connector_img").value ;
+           var connector_tbl=document.getElementById("connector_tbl").value ;
+
+           var update_links=document.getElementById("update_links").checked;
+           google.script.run
+              .withSuccessHandler(
+                function(textAndTranslation, element) {
+                  $('#working_text').val(textAndTranslation);
+
+                     element.disabled = false;
+                })
+              .withFailureHandler(
+                function(msg, element) {
+                  showError(msg, $('#button-bar'));
+                  element.disabled = false;
+                })
+              .withUserObject(this)
+              .captionize_document(labelStyleToUse,use_center,use_italic,use_bold,img_caption_on,tbl_caption_on,img_label,tbl_label,img_ab_flag,tbl_ab_flag,start_img,start_tbl,img_oldlabel,tbl_oldlabel,font_size,font_color,heading_num_img,heading_num_tbl,update_links,connector_img,connector_tbl);
+
+
+        }
+
+
+        /**
+         * Inserts a div that contains an error message after a given element.
+         *
+         * @param msg The error message to display.
+         * @param element The element after which to display the error.
+         */
+        function showError(msg, element) {
+          var div = $('<div id="error" class="error">' + msg + '<\/div>');
+          $(element).after(div);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
